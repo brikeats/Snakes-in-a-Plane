@@ -1,4 +1,5 @@
-from snakes import fit_snake
+import sys
+import os
 import numpy as np
 from skimage import measure
 from scipy.interpolate import splprep, splev
@@ -7,6 +8,8 @@ from scipy.ndimage.filters import uniform_filter
 from scipy import ndimage
 from skimage import filters, feature, morphology
 import matplotlib.pyplot as plt
+sys.path.append(os.path.join('.','lib'))
+from BKlib import fit_snake
 
 
 def enhance_ridges(frame, mask=None):
