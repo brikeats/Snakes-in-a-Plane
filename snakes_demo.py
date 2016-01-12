@@ -70,7 +70,6 @@ edge_dist = filters.gaussian_filter(edge_dist, sigma=2)
 # distance from skeleton branch points
 blurred_skeleton = uniform_filter(skeleton.astype(float), size=3)
 corner_im = blurred_skeleton > 4./9
-corner_dist = ndimage.distance_transform_edt(-corner_im)
 corners_labels = measure.label(corner_im)
 corners = np.array([region.centroid for region in measure.regionprops(corners_labels)])
 
@@ -113,7 +112,7 @@ plt.plot(x, y, 'bo')
 line_obj, = plt.plot(x, y, 'ro')
 plt.axis('off')
 
-snake_pts = fit_snake(boundary_pts, edge_dist, corner_dist, alpha=0.5, beta=0.2, gamma=0.8, point_plot=line_obj)
+snake_pts = fit_snake(boundary_pts, edge_dist, alpha=0.5, beta=0.2, point_plot=line_obj)
 
 plt.ioff()
 plt.show()
