@@ -17,7 +17,6 @@ def enhance_ridges(frame, mask=None):
     blurred = filters.gaussian_filter(frame, 2)
     Hxx, Hxy, Hyy = feature.hessian_matrix(blurred, sigma=4.5, mode='nearest')
     ridges = feature.hessian_matrix_eigvals(Hxx, Hxy, Hyy)[0]
-
     return np.abs(ridges)
 
 
@@ -27,7 +26,6 @@ def mask_to_boundary_pts(mask, pt_spacing=10):
     Convert a binary image containing a single object to a set
     of 2D points that are equally spaced along the object's contour.
     """
-
     # interpolate boundary
     boundary_pts = measure.find_contours(mask, 0)[0]
     tck, u = splprep(boundary_pts.T, u=None, s=0.0, per=1)
@@ -47,14 +45,14 @@ def mask_to_boundary_pts(mask, pt_spacing=10):
 
 # load data: the raw image an a binary region-of-interest image
 im = np.load('cropped_frame.npy')
-mask = np.load('enlarged_mask.npy')
+# mask = np.load('enlarged_mask.npy')
 # mask = np.load('shifted_mask.npy')
-# mask = np.load('shrunken_mask.npy')
+mask = np.load('shrunken_mask.npy')
 # mask = np.load('target_mask.npy')
 
 
 # get boundary points of mask
-boundary_pts = mask_to_boundary_pts(mask, pt_spacing=5)
+boundary_pts = mask_to_boundary_pts(mask, pt_spacing=3)
 x, y = boundary_pts[:,1], boundary_pts[:,0]
 
 
