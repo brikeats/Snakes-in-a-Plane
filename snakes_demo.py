@@ -2,6 +2,7 @@ import sys
 import os
 import numpy as np
 from skimage import measure
+from functools import partial
 from scipy.interpolate import splprep, splev
 from scipy.integrate import simps
 from scipy.ndimage.filters import uniform_filter
@@ -103,14 +104,16 @@ plt.show()
 
 
 # show an animation of the fitting procedure
-plt.ion()
-plt.figure()
+fig = plt.figure()
 plt.imshow(im, cmap='gray')
 plt.plot(x, y, 'bo')
 line_obj, = plt.plot(x, y, 'ro')
-plt.axis('off')
-
-snake_pts = fit_snake(boundary_pts, edge_dist, alpha=0.5, beta=0.2, point_plot=line_obj)
-
-plt.ioff()
-plt.show()
+    
+for _ in range(100):
+    
+    plt.ion()
+    plt.axis('off')
+    snake_pts = fit_snake(boundary_pts, edge_dist, nits=60, alpha=0.5, beta=0.2, point_plot=line_obj)
+    plt.ioff()
+    # plt.show()
+    
