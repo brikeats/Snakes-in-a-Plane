@@ -3,7 +3,6 @@ from scipy import optimize, ndimage
 import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
-import time
 
 
     
@@ -92,7 +91,7 @@ def fit_snake(pts, edge_dist, alpha=0.5, beta=0.25, nits=100, point_plot=None):
             point_plot.set_data(x,y)
             plt.title('%i iterations' % callback_function.nits)
             point_plot.figure.canvas.draw()
-            time.sleep(0.1)
+            plt.pause(0.1)
         callback_function.nits = 0
     else:
         callback_function = None
