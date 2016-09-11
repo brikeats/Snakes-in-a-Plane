@@ -15,9 +15,9 @@ from snakes import fit_snake
 
 def enhance_ridges(frame, mask=None):
     """Detect ridges (larger hessian eigenvalue)"""
-    blurred = filters.gaussian_filter(frame, 2)
+    blurred = filters.gaussian(frame, 2)
     Hxx, Hxy, Hyy = feature.hessian_matrix(blurred, sigma=4.5, mode='nearest')
-    ridges = feature.hessian_matrix_eigvals(Hxx, Hxy, Hyy)[0]
+    ridges = feature.hessian_matrix_eigvals(Hxx, Hxy, Hyy)[1]
     return np.abs(ridges)
 
 
@@ -40,17 +40,16 @@ def mask_to_boundary_pts(mask, pt_spacing=10):
 
     u_equidist = np.linspace(0, 1, N+1)
     x_equidist, y_equidist = splev(u_equidist, tck, der=0)
-    return np.array(zip(x_equidist, y_equidist))
+    return np.array(list(zip(x_equidist, y_equidist)))
 
 
 
 # load data: the raw image an a binary region-of-interest image
 im = np.load('cropped_frame.npy')
-# mask = np.load('enlarged_mask.npy')
+mask = np.load('enlarged_mask.npy')
 # mask = np.load('shifted_mask.npy')
-mask = np.load('shrunken_mask.npy')
+# mask = np.load('shrunken_mask.npy')
 # mask = np.load('target_mask.npy')
-
 
 # get boundary points of mask
 boundary_pts = mask_to_boundary_pts(mask, pt_spacing=3)
@@ -63,7 +62,7 @@ thresh = filters.threshold_otsu(ridges)
 prominent_ridges = ridges > 0.8*thresh
 skeleton = morphology.skeletonize(prominent_ridges)
 edge_dist = ndimage.distance_transform_edt(-skeleton)
-edge_dist = filters.gaussian_filter(edge_dist, sigma=2)
+edge_dist = filters.gaussian(edge_dist, sigma=2)
 
 
 # distance from skeleton branch points
@@ -108,12 +107,12 @@ fig = plt.figure()
 plt.imshow(im, cmap='gray')
 plt.plot(x, y, 'bo')
 line_obj, = plt.plot(x, y, 'ro')
+plt.axis('off')
     
-for _ in range(100):
-    
-    plt.ion()
-    plt.axis('off')
-    snake_pts = fit_snake(boundary_pts, edge_dist, nits=60, alpha=0.5, beta=0.2, point_plot=line_obj)
-    plt.ioff()
-    # plt.show()
+plt.ion()
+plt.pause(0.01)
+snake_pts = fit_snake(boundary_pts, edge_dist, nits=60, alpha=0.5, beta=0.2, point_plot=line_obj)
+plt.ioff()
+plt.pause(0.01)
+plt.show()
     
