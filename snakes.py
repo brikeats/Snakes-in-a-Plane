@@ -34,7 +34,7 @@ def snake_energy(flattened_pts, edge_dist, alpha, beta):
         float: Image energy. (lower is better)
     """
 
-    pts = np.reshape(flattened_pts, (len(flattened_pts)/2, 2))
+    pts = np.reshape(flattened_pts, (int(len(flattened_pts)/2), 2))
     
     # external energy (favors low values of distance image)
     dist_vals = ndimage.interpolation.map_coordinates(edge_dist, [pts[:,0], pts[:,1]], order=1)
@@ -102,7 +102,7 @@ def fit_snake(pts, edge_dist, alpha=0.5, beta=0.25, nits=100, point_plot=None):
     options['maxiter'] = nits  # FIXME: check convergence
     method = 'BFGS'  # 'BFGS', 'CG', or 'Powell'. 'Nelder-Mead' has very slow convergence
     res = optimize.minimize(cost_function, pts.ravel(), method=method, options=options, callback=callback_function)
-    optimal_pts = np.reshape(res.x, (len(res.x)/2, 2))
+    optimal_pts = np.reshape(res.x, (int(len(res.x)/2), 2))
 
     return optimal_pts
 

@@ -8,15 +8,18 @@ from scipy.integrate import simps
 from scipy.ndimage.filters import uniform_filter
 from scipy import ndimage
 from skimage import filters, feature, morphology
+import matplotlib
 import matplotlib.pyplot as plt
-sys.path.append(os.path.join('.','lib'))
+import warnings
 from snakes import fit_snake
+
+warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
 
 
 def enhance_ridges(frame, mask=None):
     """Detect ridges (larger hessian eigenvalue)"""
     blurred = filters.gaussian(frame, 2)
-    Hxx, Hxy, Hyy = feature.hessian_matrix(blurred, sigma=4.5, mode='nearest')
+    Hxx, Hxy, Hyy = feature.hessian_matrix(blurred, sigma=4.5, mode='nearest', order="xy")
     ridges = feature.hessian_matrix_eigvals(Hxx, Hxy, Hyy)[1]
     return np.abs(ridges)
 
