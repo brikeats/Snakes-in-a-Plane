@@ -91,7 +91,7 @@ def fit_snake(pts, edge_dist, alpha=0.5, beta=0.25, nits=100, point_plot=None):
             point_plot.set_data(x,y)
             plt.title('%i iterations' % callback_function.nits)
             point_plot.figure.canvas.draw()
-            plt.pause(0.1)
+            plt.pause(0.02)
         callback_function.nits = 0
     else:
         callback_function = None

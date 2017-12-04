@@ -64,7 +64,7 @@ ridges = enhance_ridges(im)
 thresh = filters.threshold_otsu(ridges)
 prominent_ridges = ridges > 0.8*thresh
 skeleton = morphology.skeletonize(prominent_ridges)
-edge_dist = ndimage.distance_transform_edt(-skeleton)
+edge_dist = ndimage.distance_transform_edt(~skeleton)
 edge_dist = filters.gaussian(edge_dist, sigma=2)
 
 
